@@ -217,25 +217,3 @@ total.ui(cost.se[[3]])
 total.ui(DALY.diff[[1]]) 
 total.ui(DALY.diff[[2]]) 
 
-median.cost.df.ci <- rbind(median.cost.ci.nohivst,median.cost.ci.atlas,median.cost.ci.su) %>% 
-  as.data.frame()
-colnames(median.cost.df.ci) <- c(2019:2039)
-rownames(median.cost.df.ci) <- c("No HIVST", "ATLAS Only", "ATLAS Scale-up")
-
-Cost_20y_CI <- rowSums(median.cost.df.ci)
-median.cost.df <- median.cost.df %>% 
-  rownames_to_column(var = "Scenario") %>% 
-  pivot_longer(cols = !Scenario,
-               names_to = c("Year"),
-               values_to = "Cost")
-median.cost.df$Year <- as.numeric(median.cost.df$Year)
-median.cost.df$Cost <- median.cost.df$Cost/1000000
-
-cost.by.year <- ggplot(median.cost.df,aes(x = Year, y = Cost, colour = Scenario))+
-  geom_line(position=position_dodge(width=0.3), size = 0.5)+
-  scale_colour_manual(values = wes_palette("FantasticFox1")) +
-  ylab("Cost (mllion USD, not discounted)") +
-  scale_y_continuous(labels = comma,  expand = c(0,0))+
-  labs(title = "Median Annual Cost of Program")
-cost.by.year
-
