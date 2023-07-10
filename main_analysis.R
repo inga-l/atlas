@@ -1,6 +1,6 @@
 ## TIDIED UP WHOLE SCRIPT
 library(pacman)
-p_load(tidyverse, readr, ggplot2, ggrepel, ggfortify, ggthemes, RColorBrewer, ggpubr, cowplot, "scales", EnvStats,hesim, ggbreak, wesanderson)
+p_load(tidyverse, readr, ggplot2, ggrepel, ggfortify, ggthemes, RColorBrewer, ggpubr, cowplot, "scales", EnvStats,hesim, ggbreak, wesanderson, writexl, openxlsx, lzma)
 theme_set(theme_few())
 
 #LOADING DB----------
