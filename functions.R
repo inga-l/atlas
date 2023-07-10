@@ -406,6 +406,248 @@ compare.costs.3Y <- function(list){
   return(output)
 }
 
+total.cost.calc.updated <- function(cost.list, rate = 0.04, timeframe){
+  
+  ## Conv Test
+  NbOTFSW_Base <- Conv.Test(NoHIVST, pop = "FSW", timeframe = timeframe)
+  CostConvFSW_Base <- discount(NbOTFSW_Base, cost = cost.list[1], rate)
+  NbOTMSM_Base <- Conv.Test(NoHIVST, pop = "MSM", timeframe = timeframe)
+  CostConvMSM_Base <- discount(NbOTMSM_Base, cost = cost.list[2], rate)
+  NbOTGEN_Base <- Conv.Test(NoHIVST, pop = "GEN", timeframe = timeframe)
+  CostConvGEN_Base <- discount(NbOTGEN_Base, cost = cost.list[3], rate)
+  CostConv_Base <- CostConvFSW_Base + CostConvMSM_Base + CostConvGEN_Base
+  
+  NbOTFSW_ATLAS <- Conv.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
+  CostConvFSW_ATLAS <- discount(NbOTFSW_ATLAS, cost = cost.list[1], rate)
+  NbOTMSM_ATLAS <- Conv.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
+  CostConvMSM_ATLAS <- discount(NbOTMSM_ATLAS, cost = cost.list[2], rate)
+  NbOTGEN_ATLAS <- Conv.Test(ATLASonly, pop = "GEN", timeframe = timeframe)
+  CostConvGEN_ATLAS <- discount(NbOTGEN_ATLAS, cost = cost.list[3], rate)
+  CostConv_ATLAS <- CostConvFSW_ATLAS + CostConvMSM_ATLAS + CostConvGEN_ATLAS
+  
+  NbOTFSW_SU <- Conv.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
+  CostConvFSW_SU <- discount(NbOTFSW_SU, cost = cost.list[1], rate)
+  NbOTMSM_SU <- Conv.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
+  CostConvMSM_SU <- discount(NbOTMSM_SU, cost = cost.list[2], rate)
+  NbOTGEN_SU <- Conv.Test(ATLASSU, pop = "GEN", timeframe = timeframe)
+  CostConvGEN_SU <- discount(NbOTGEN_SU, cost = cost.list[3], rate)
+  CostConv_SU <- CostConvFSW_SU + CostConvMSM_SU + CostConvGEN_SU
+  
+  CostConv_Base <- as.data.frame(CostConv_Base)
+  CostConv_ATLAS <- as.data.frame(CostConv_ATLAS)
+  CostConv_SU <- as.data.frame(CostConv_SU)
+  # names(CostByYear) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
+  
+  ## Self Test
+  NbSTFSW_ATLAS <- Self.Test(df = ATLASonly, pop = "FSW", timeframe = timeframe)
+  STFSW_ATLAS <- discount(NbSTFSW_ATLAS, cost = cost.list[4], rate)
+  NbSTMSM_ATLAS <- Self.Test(df = ATLASonly, pop = "MSM", timeframe = timeframe)
+  STMSM_ATLAS <- discount(NbSTMSM_ATLAS, cost = cost.list[5], rate)
+  ST_ATLAS <- STFSW_ATLAS + STMSM_ATLAS
+  
+  NbSTFSW_SU <- Self.Test(df = ATLASSU, pop = "FSW", timeframe = timeframe)
+  STFSW_SU <- discount.su(NbSTFSW_SU, cost = cost.list[4], 
+                          cost.22 = cost.list[6], cost.23 = cost.list[7], cost.24 = cost.list[8], 
+                          cost.su = cost.list[13], rate)
+  NbSTMSM_SU <- Self.Test(df = ATLASSU, pop = "MSM", timeframe = timeframe)
+  STMSM_SU <- discount.su(NbSTMSM_SU, cost = cost.list[5],
+                          cost.22 = cost.list[9], cost.23 = cost.list[10], cost.24 = cost.list[11], 
+                          cost.su = cost.list[14], rate)
+  ST_SU <- STFSW_SU + STMSM_SU
+  
+  ST_ATLAS <- as.data.frame(ST_ATLAS)
+  ST_SU <- as.data.frame(ST_SU)
+  
+  #  names(CostByYear) <- c("ATLAS Only", "Scale Up Scenario")
+  
+  ## Treatment
+  NbTreated_Base <- ART(NoHIVST, timeframe = timeframe)
+  NbTreated_ATLAS <- ART(ATLASonly, timeframe = timeframe)
+  NbTreated_SU <- ART(ATLASSU, timeframe = timeframe)
+  Treated_Base <- discount(df = NbTreated_Base, cost = cost.list[12], rate)
+  Treated_ATLAS <- discount(df = NbTreated_ATLAS, cost = cost.list[12], rate)
+  Treated_SU <-  discount(df = NbTreated_SU, cost = cost.list[12], rate)
+  
+  Treated_Base <- as.data.frame(Treated_Base)
+  Treated_ATLAS <- as.data.frame(Treated_ATLAS)
+  Treated_SU <- as.data.frame(Treated_SU)
+  
+  #  CostByYear <- list(Treated_Base, Treated_ATLAS, Treated_SU)
+  #  names(CostByYear) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
+  
+  
+  ## Conf Test
+  NbConf_FSWATLAS <- Conf.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
+  Conf_FSWATLAS <- discount(NbConf_FSWATLAS, cost = cost.list[1], rate)
+  NbConf_MSMATLAS <- Conf.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
+  Conf_MSMATLAS <- discount(NbConf_MSMATLAS, cost = cost.list[2], rate)
+  Conf_ATLAS <- Conf_FSWATLAS + Conf_MSMATLAS
+  
+  NbConf_FSWSU <- Conf.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
+  Conf_FSWSU <- discount(NbConf_FSWSU, cost = cost.list[1], rate)
+  NbConf_MSMSU <- Conf.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
+  Conf_MSMSU <- discount(NbConf_MSMSU, cost = cost.list[2], rate)
+  Conf_SU <- Conf_FSWSU + Conf_MSMSU
+  
+  Conf_ATLAS <- as.data.frame(Conf_ATLAS)
+  Conf_SU <- as.data.frame(Conf_SU)
+  
+  # Conf <- list(Conf_ATLAS, Conf_SU)
+  # names(Conf) <- c("ATLAS Only", "Scale Up Scenario")
+  
+  ## total
+  total.by.year.base <- CostConv_Base + Treated_Base
+  total.by.year.ATLAS <- CostConv_ATLAS + ST_ATLAS + Treated_ATLAS + Conf_ATLAS
+  total.by.year.SU <- CostConv_SU + ST_SU + Treated_SU + Conf_SU
+  
+  total.list <- list(total.by.year.base, total.by.year.ATLAS, total.by.year.SU)
+  names(total.list) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
+  return(total.list)
+}
+
+total.cost.calc.noart <- function(cost.list, rate = 0.0, timeframe){
+  
+  ## Conv Test
+  NbOTFSW_Base <- Conv.Test(NoHIVST, pop = "FSW", timeframe = timeframe)
+  CostConvFSW_Base <- discount(NbOTFSW_Base, cost = cost.list[1], rate)
+  NbOTMSM_Base <- Conv.Test(NoHIVST, pop = "MSM", timeframe = timeframe)
+  CostConvMSM_Base <- discount(NbOTMSM_Base, cost = cost.list[2], rate)
+  NbOTGEN_Base <- Conv.Test(NoHIVST, pop = "GEN", timeframe = timeframe)
+  CostConvGEN_Base <- discount(NbOTGEN_Base, cost = cost.list[3], rate)
+  CostConv_Base <- CostConvFSW_Base + CostConvMSM_Base + CostConvGEN_Base
+  
+  NbOTFSW_ATLAS <- Conv.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
+  CostConvFSW_ATLAS <- discount(NbOTFSW_ATLAS, cost = cost.list[1], rate)
+  NbOTMSM_ATLAS <- Conv.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
+  CostConvMSM_ATLAS <- discount(NbOTMSM_ATLAS, cost = cost.list[2], rate)
+  NbOTGEN_ATLAS <- Conv.Test(ATLASonly, pop = "GEN", timeframe = timeframe)
+  CostConvGEN_ATLAS <- discount(NbOTGEN_ATLAS, cost = cost.list[3], rate)
+  CostConv_ATLAS <- CostConvFSW_ATLAS + CostConvMSM_ATLAS + CostConvGEN_ATLAS
+  
+  NbOTFSW_SU <- Conv.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
+  CostConvFSW_SU <- discount(NbOTFSW_SU, cost = cost.list[1], rate)
+  NbOTMSM_SU <- Conv.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
+  CostConvMSM_SU <- discount(NbOTMSM_SU, cost = cost.list[2], rate)
+  NbOTGEN_SU <- Conv.Test(ATLASSU, pop = "GEN", timeframe = timeframe)
+  CostConvGEN_SU <- discount(NbOTGEN_SU, cost = cost.list[3], rate)
+  CostConv_SU <- CostConvFSW_SU + CostConvMSM_SU + CostConvGEN_SU
+  
+  CostConv_Base <- as.data.frame(CostConv_Base)
+  CostConv_ATLAS <- as.data.frame(CostConv_ATLAS)
+  CostConv_SU <- as.data.frame(CostConv_SU)
+  
+  ## Self Test
+  NbSTFSW_ATLAS <- Self.Test(df = ATLASonly, pop = "FSW", timeframe = timeframe)
+  STFSW_ATLAS <- discount(NbSTFSW_ATLAS, cost = cost.list[4], rate)
+  NbSTMSM_ATLAS <- Self.Test(df = ATLASonly, pop = "MSM", timeframe = timeframe)
+  STMSM_ATLAS <- discount(NbSTMSM_ATLAS, cost = cost.list[5], rate)
+  ST_ATLAS <- STFSW_ATLAS + STMSM_ATLAS
+  
+  NbSTFSW_SU <- Self.Test(df = ATLASSU, pop = "FSW", timeframe = timeframe)
+  STFSW_SU <- discount.su(NbSTFSW_SU, cost = cost.list[4], 
+                          cost.22 = cost.list[6], cost.23 = cost.list[7], cost.24 = cost.list[8], 
+                          cost.su = cost.list[13], rate)
+  NbSTMSM_SU <- Self.Test(df = ATLASSU, pop = "MSM", timeframe = timeframe)
+  STMSM_SU <- discount.su(NbSTMSM_SU, cost = cost.list[5],
+                          cost.22 = cost.list[9], cost.23 = cost.list[10], cost.24 = cost.list[11], 
+                          cost.su = cost.list[14], rate)
+  ST_SU <- STFSW_SU + STMSM_SU
+  
+  ST_ATLAS <- as.data.frame(ST_ATLAS)
+  ST_SU <- as.data.frame(ST_SU)
+
+  
+  ## Conf Test
+  NbConf_FSWATLAS <- Conf.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
+  Conf_FSWATLAS <- discount(NbConf_FSWATLAS, cost = cost.list[1], rate)
+  NbConf_MSMATLAS <- Conf.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
+  Conf_MSMATLAS <- discount(NbConf_MSMATLAS, cost = cost.list[2], rate)
+  Conf_ATLAS <- Conf_FSWATLAS + Conf_MSMATLAS
+  
+  NbConf_FSWSU <- Conf.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
+  Conf_FSWSU <- discount(NbConf_FSWSU, cost = cost.list[1], rate)
+  NbConf_MSMSU <- Conf.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
+  Conf_MSMSU <- discount(NbConf_MSMSU, cost = cost.list[2], rate)
+  Conf_SU <- Conf_FSWSU + Conf_MSMSU
+  
+  Conf_ATLAS <- as.data.frame(Conf_ATLAS)
+  Conf_SU <- as.data.frame(Conf_SU)
+  
+  ## total
+  total.by.year.base <- CostConv_Base
+  total.by.year.ATLAS <- CostConv_ATLAS + ST_ATLAS + Conf_ATLAS
+  total.by.year.SU <- CostConv_SU + ST_SU + Conf_SU
+  
+  total.list <- list(total.by.year.base, total.by.year.ATLAS, total.by.year.SU)
+  names(total.list) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
+  return(total.list)
+}
+
+total.cost.calc.3Y <- function(cost.list, rate = 0.04, timeframe = 3){
+  
+  ## Conv Test
+  NbOTFSW_Base <- Conv.Test(NoHIVST, pop = "FSW")
+  CostConvFSW_Base <- discount(NbOTFSW_Base, cost = cost.list[1], rate)
+  NbOTMSM_Base <- Conv.Test(NoHIVST, pop = "MSM")
+  CostConvMSM_Base <- discount(NbOTMSM_Base, cost = cost.list[2], rate)
+  NbOTGEN_Base <- Conv.Test(NoHIVST, pop = "GEN")
+  CostConvGEN_Base <- discount(NbOTGEN_Base, cost = cost.list[3], rate)
+  CostConv_Base <- CostConvFSW_Base + CostConvMSM_Base + CostConvGEN_Base
+  
+  NbOTFSW_ATLAS <- Conv.Test(ATLASonly, pop = "FSW")
+  CostConvFSW_ATLAS <- discount(NbOTFSW_ATLAS, cost = cost.list[1], rate)
+  NbOTMSM_ATLAS <- Conv.Test(ATLASonly, pop = "MSM")
+  CostConvMSM_ATLAS <- discount(NbOTMSM_ATLAS, cost = cost.list[2], rate)
+  NbOTGEN_ATLAS <- Conv.Test(ATLASonly, pop = "GEN")
+  CostConvGEN_ATLAS <- discount(NbOTGEN_ATLAS, cost = cost.list[3], rate)
+  CostConv_ATLAS <- CostConvFSW_ATLAS + CostConvMSM_ATLAS + CostConvGEN_ATLAS
+  
+  CostConv_Base <- as.data.frame(CostConv_Base)
+  CostConv_ATLAS <- as.data.frame(CostConv_ATLAS)
+  #  CostConv_SU <- as.data.frame(CostConv_SU)
+  # names(CostByYear) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
+  
+  ## Self Test
+  NbSTFSW_ATLAS <- Self.Test(df = ATLASonly, pop = "FSW")
+  STFSW_ATLAS <- discount(NbSTFSW_ATLAS, cost = cost.list[4], rate)
+  NbSTMSM_ATLAS <- Self.Test(df = ATLASonly, pop = "MSM")
+  STMSM_ATLAS <- discount(NbSTMSM_ATLAS, cost = cost.list[5], rate)
+  ST_ATLAS <- STFSW_ATLAS + STMSM_ATLAS
+  
+  ST_ATLAS <- as.data.frame(ST_ATLAS)
+  
+  
+  ## Treatment
+  NbTreated_Base <- ART(NoHIVST)
+  NbTreated_ATLAS <- ART(ATLASonly)
+  Treated_Base <- discount(df = NbTreated_Base, cost = cost.list[6], rate)
+  Treated_ATLAS <- discount(df = NbTreated_ATLAS, cost = cost.list[6], rate)
+  
+  
+  Treated_Base <- as.data.frame(Treated_Base)
+  Treated_ATLAS <- as.data.frame(Treated_ATLAS)
+  
+  
+  ## Conf Test
+  NbConf_FSWATLAS <- Conf.Test(ATLASonly, pop = "FSW")
+  Conf_FSWATLAS <- discount(NbConf_FSWATLAS, cost = cost.list[1], rate)
+  NbConf_MSMATLAS <- Conf.Test(ATLASonly, pop = "MSM")
+  Conf_MSMATLAS <- discount(NbConf_MSMATLAS, cost = cost.list[2], rate)
+  Conf_ATLAS <- Conf_FSWATLAS + Conf_MSMATLAS
+  
+  
+  Conf_ATLAS <- as.data.frame(Conf_ATLAS)
+  
+  
+  ## total
+  total.by.year.base <- CostConv_Base + Treated_Base
+  total.by.year.ATLAS <- CostConv_ATLAS + ST_ATLAS + Treated_ATLAS + Conf_ATLAS
+  
+  total.list <- list(total.by.year.base, total.by.year.ATLAS)
+  names(total.list) <- c("Base Scenario", "ATLAS Only")
+  return(total.list)
+}
+
 monte.carlo.icer.3 <- function(num, rate = 0.04, outcome, timeframe = 20){ # time frame = 2019-2039
   set.seed(34242)
   # 5 costs
@@ -434,6 +676,7 @@ monte.carlo.icer.3 <- function(num, rate = 0.04, outcome, timeframe = 20){ # tim
   names(icer.list) <- c("atlas icer")
   return(icer.list)
 }
+
 monte.carlo.icer.ci <- function(num, rate = 0.04, outcome, timeframe = 20){ # time frame = 2019-2039
   set.seed(34242)
   # 5 costs
@@ -701,248 +944,6 @@ total.ui <- function(df,tf = 21){
 Unc.int <- function(df){
   ui <- quantile(df, c(0.5, 0.05,0.95))
   return(ui)
-}
-
-total.cost.calc.updated <- function(cost.list, rate = 0.04, timeframe){
-  
-  ## Conv Test
-  NbOTFSW_Base <- Conv.Test(NoHIVST, pop = "FSW", timeframe = timeframe)
-  CostConvFSW_Base <- discount(NbOTFSW_Base, cost = cost.list[1], rate)
-  NbOTMSM_Base <- Conv.Test(NoHIVST, pop = "MSM", timeframe = timeframe)
-  CostConvMSM_Base <- discount(NbOTMSM_Base, cost = cost.list[2], rate)
-  NbOTGEN_Base <- Conv.Test(NoHIVST, pop = "GEN", timeframe = timeframe)
-  CostConvGEN_Base <- discount(NbOTGEN_Base, cost = cost.list[3], rate)
-  CostConv_Base <- CostConvFSW_Base + CostConvMSM_Base + CostConvGEN_Base
-  
-  NbOTFSW_ATLAS <- Conv.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
-  CostConvFSW_ATLAS <- discount(NbOTFSW_ATLAS, cost = cost.list[1], rate)
-  NbOTMSM_ATLAS <- Conv.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
-  CostConvMSM_ATLAS <- discount(NbOTMSM_ATLAS, cost = cost.list[2], rate)
-  NbOTGEN_ATLAS <- Conv.Test(ATLASonly, pop = "GEN", timeframe = timeframe)
-  CostConvGEN_ATLAS <- discount(NbOTGEN_ATLAS, cost = cost.list[3], rate)
-  CostConv_ATLAS <- CostConvFSW_ATLAS + CostConvMSM_ATLAS + CostConvGEN_ATLAS
-  
-  NbOTFSW_SU <- Conv.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
-  CostConvFSW_SU <- discount(NbOTFSW_SU, cost = cost.list[1], rate)
-  NbOTMSM_SU <- Conv.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
-  CostConvMSM_SU <- discount(NbOTMSM_SU, cost = cost.list[2], rate)
-  NbOTGEN_SU <- Conv.Test(ATLASSU, pop = "GEN", timeframe = timeframe)
-  CostConvGEN_SU <- discount(NbOTGEN_SU, cost = cost.list[3], rate)
-  CostConv_SU <- CostConvFSW_SU + CostConvMSM_SU + CostConvGEN_SU
-  
-  CostConv_Base <- as.data.frame(CostConv_Base)
-  CostConv_ATLAS <- as.data.frame(CostConv_ATLAS)
-  CostConv_SU <- as.data.frame(CostConv_SU)
-  # names(CostByYear) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
-  
-  ## Self Test
-  NbSTFSW_ATLAS <- Self.Test(df = ATLASonly, pop = "FSW", timeframe = timeframe)
-  STFSW_ATLAS <- discount(NbSTFSW_ATLAS, cost = cost.list[4], rate)
-  NbSTMSM_ATLAS <- Self.Test(df = ATLASonly, pop = "MSM", timeframe = timeframe)
-  STMSM_ATLAS <- discount(NbSTMSM_ATLAS, cost = cost.list[5], rate)
-  ST_ATLAS <- STFSW_ATLAS + STMSM_ATLAS
-  
-  NbSTFSW_SU <- Self.Test(df = ATLASSU, pop = "FSW", timeframe = timeframe)
-  STFSW_SU <- discount.su(NbSTFSW_SU, cost = cost.list[4], 
-                          cost.22 = cost.list[6], cost.23 = cost.list[7], cost.24 = cost.list[8], 
-                          cost.su = cost.list[13], rate)
-  NbSTMSM_SU <- Self.Test(df = ATLASSU, pop = "MSM", timeframe = timeframe)
-  STMSM_SU <- discount.su(NbSTMSM_SU, cost = cost.list[5],
-                          cost.22 = cost.list[9], cost.23 = cost.list[10], cost.24 = cost.list[11], 
-                          cost.su = cost.list[14], rate)
-  ST_SU <- STFSW_SU + STMSM_SU
-  
-  ST_ATLAS <- as.data.frame(ST_ATLAS)
-  ST_SU <- as.data.frame(ST_SU)
-  
-  #  names(CostByYear) <- c("ATLAS Only", "Scale Up Scenario")
-  
-  ## Treatment
-  NbTreated_Base <- ART(NoHIVST, timeframe = timeframe)
-  NbTreated_ATLAS <- ART(ATLASonly, timeframe = timeframe)
-  NbTreated_SU <- ART(ATLASSU, timeframe = timeframe)
-  Treated_Base <- discount(df = NbTreated_Base, cost = cost.list[12], rate)
-  Treated_ATLAS <- discount(df = NbTreated_ATLAS, cost = cost.list[12], rate)
-  Treated_SU <-  discount(df = NbTreated_SU, cost = cost.list[12], rate)
-  
-  Treated_Base <- as.data.frame(Treated_Base)
-  Treated_ATLAS <- as.data.frame(Treated_ATLAS)
-  Treated_SU <- as.data.frame(Treated_SU)
-  
-  #  CostByYear <- list(Treated_Base, Treated_ATLAS, Treated_SU)
-  #  names(CostByYear) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
-  
-  
-  ## Conf Test
-  NbConf_FSWATLAS <- Conf.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
-  Conf_FSWATLAS <- discount(NbConf_FSWATLAS, cost = cost.list[1], rate)
-  NbConf_MSMATLAS <- Conf.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
-  Conf_MSMATLAS <- discount(NbConf_MSMATLAS, cost = cost.list[2], rate)
-  Conf_ATLAS <- Conf_FSWATLAS + Conf_MSMATLAS
-  
-  NbConf_FSWSU <- Conf.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
-  Conf_FSWSU <- discount(NbConf_FSWSU, cost = cost.list[1], rate)
-  NbConf_MSMSU <- Conf.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
-  Conf_MSMSU <- discount(NbConf_MSMSU, cost = cost.list[2], rate)
-  Conf_SU <- Conf_FSWSU + Conf_MSMSU
-  
-  Conf_ATLAS <- as.data.frame(Conf_ATLAS)
-  Conf_SU <- as.data.frame(Conf_SU)
-  
-  # Conf <- list(Conf_ATLAS, Conf_SU)
-  # names(Conf) <- c("ATLAS Only", "Scale Up Scenario")
-  
-  ## total
-  total.by.year.base <- CostConv_Base + Treated_Base
-  total.by.year.ATLAS <- CostConv_ATLAS + ST_ATLAS + Treated_ATLAS + Conf_ATLAS
-  total.by.year.SU <- CostConv_SU + ST_SU + Treated_SU + Conf_SU
-  
-  total.list <- list(total.by.year.base, total.by.year.ATLAS, total.by.year.SU)
-  names(total.list) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
-  return(total.list)
-}
-
-total.cost.calc.noart <- function(cost.list, rate = 0.0, timeframe){
-  
-  ## Conv Test
-  NbOTFSW_Base <- Conv.Test(NoHIVST, pop = "FSW", timeframe = timeframe)
-  CostConvFSW_Base <- discount(NbOTFSW_Base, cost = cost.list[1], rate)
-  NbOTMSM_Base <- Conv.Test(NoHIVST, pop = "MSM", timeframe = timeframe)
-  CostConvMSM_Base <- discount(NbOTMSM_Base, cost = cost.list[2], rate)
-  NbOTGEN_Base <- Conv.Test(NoHIVST, pop = "GEN", timeframe = timeframe)
-  CostConvGEN_Base <- discount(NbOTGEN_Base, cost = cost.list[3], rate)
-  CostConv_Base <- CostConvFSW_Base + CostConvMSM_Base + CostConvGEN_Base
-  
-  NbOTFSW_ATLAS <- Conv.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
-  CostConvFSW_ATLAS <- discount(NbOTFSW_ATLAS, cost = cost.list[1], rate)
-  NbOTMSM_ATLAS <- Conv.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
-  CostConvMSM_ATLAS <- discount(NbOTMSM_ATLAS, cost = cost.list[2], rate)
-  NbOTGEN_ATLAS <- Conv.Test(ATLASonly, pop = "GEN", timeframe = timeframe)
-  CostConvGEN_ATLAS <- discount(NbOTGEN_ATLAS, cost = cost.list[3], rate)
-  CostConv_ATLAS <- CostConvFSW_ATLAS + CostConvMSM_ATLAS + CostConvGEN_ATLAS
-  
-  NbOTFSW_SU <- Conv.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
-  CostConvFSW_SU <- discount(NbOTFSW_SU, cost = cost.list[1], rate)
-  NbOTMSM_SU <- Conv.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
-  CostConvMSM_SU <- discount(NbOTMSM_SU, cost = cost.list[2], rate)
-  NbOTGEN_SU <- Conv.Test(ATLASSU, pop = "GEN", timeframe = timeframe)
-  CostConvGEN_SU <- discount(NbOTGEN_SU, cost = cost.list[3], rate)
-  CostConv_SU <- CostConvFSW_SU + CostConvMSM_SU + CostConvGEN_SU
-  
-  CostConv_Base <- as.data.frame(CostConv_Base)
-  CostConv_ATLAS <- as.data.frame(CostConv_ATLAS)
-  CostConv_SU <- as.data.frame(CostConv_SU)
-  
-  ## Self Test
-  NbSTFSW_ATLAS <- Self.Test(df = ATLASonly, pop = "FSW", timeframe = timeframe)
-  STFSW_ATLAS <- discount(NbSTFSW_ATLAS, cost = cost.list[4], rate)
-  NbSTMSM_ATLAS <- Self.Test(df = ATLASonly, pop = "MSM", timeframe = timeframe)
-  STMSM_ATLAS <- discount(NbSTMSM_ATLAS, cost = cost.list[5], rate)
-  ST_ATLAS <- STFSW_ATLAS + STMSM_ATLAS
-  
-  NbSTFSW_SU <- Self.Test(df = ATLASSU, pop = "FSW", timeframe = timeframe)
-  STFSW_SU <- discount.su(NbSTFSW_SU, cost = cost.list[4], 
-                          cost.22 = cost.list[6], cost.23 = cost.list[7], cost.24 = cost.list[8], 
-                          cost.su = cost.list[13], rate)
-  NbSTMSM_SU <- Self.Test(df = ATLASSU, pop = "MSM", timeframe = timeframe)
-  STMSM_SU <- discount.su(NbSTMSM_SU, cost = cost.list[5],
-                          cost.22 = cost.list[9], cost.23 = cost.list[10], cost.24 = cost.list[11], 
-                          cost.su = cost.list[14], rate)
-  ST_SU <- STFSW_SU + STMSM_SU
-  
-  ST_ATLAS <- as.data.frame(ST_ATLAS)
-  ST_SU <- as.data.frame(ST_SU)
-
-  
-  ## Conf Test
-  NbConf_FSWATLAS <- Conf.Test(ATLASonly, pop = "FSW", timeframe = timeframe)
-  Conf_FSWATLAS <- discount(NbConf_FSWATLAS, cost = cost.list[1], rate)
-  NbConf_MSMATLAS <- Conf.Test(ATLASonly, pop = "MSM", timeframe = timeframe)
-  Conf_MSMATLAS <- discount(NbConf_MSMATLAS, cost = cost.list[2], rate)
-  Conf_ATLAS <- Conf_FSWATLAS + Conf_MSMATLAS
-  
-  NbConf_FSWSU <- Conf.Test(ATLASSU, pop = "FSW", timeframe = timeframe)
-  Conf_FSWSU <- discount(NbConf_FSWSU, cost = cost.list[1], rate)
-  NbConf_MSMSU <- Conf.Test(ATLASSU, pop = "MSM", timeframe = timeframe)
-  Conf_MSMSU <- discount(NbConf_MSMSU, cost = cost.list[2], rate)
-  Conf_SU <- Conf_FSWSU + Conf_MSMSU
-  
-  Conf_ATLAS <- as.data.frame(Conf_ATLAS)
-  Conf_SU <- as.data.frame(Conf_SU)
-  
-  ## total
-  total.by.year.base <- CostConv_Base
-  total.by.year.ATLAS <- CostConv_ATLAS + ST_ATLAS + Conf_ATLAS
-  total.by.year.SU <- CostConv_SU + ST_SU + Conf_SU
-  
-  total.list <- list(total.by.year.base, total.by.year.ATLAS, total.by.year.SU)
-  names(total.list) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
-  return(total.list)
-}
-
-total.cost.calc.3Y <- function(cost.list, rate = 0.04, timeframe = 3){
-  
-  ## Conv Test
-  NbOTFSW_Base <- Conv.Test(NoHIVST, pop = "FSW")
-  CostConvFSW_Base <- discount(NbOTFSW_Base, cost = cost.list[1], rate)
-  NbOTMSM_Base <- Conv.Test(NoHIVST, pop = "MSM")
-  CostConvMSM_Base <- discount(NbOTMSM_Base, cost = cost.list[2], rate)
-  NbOTGEN_Base <- Conv.Test(NoHIVST, pop = "GEN")
-  CostConvGEN_Base <- discount(NbOTGEN_Base, cost = cost.list[3], rate)
-  CostConv_Base <- CostConvFSW_Base + CostConvMSM_Base + CostConvGEN_Base
-  
-  NbOTFSW_ATLAS <- Conv.Test(ATLASonly, pop = "FSW")
-  CostConvFSW_ATLAS <- discount(NbOTFSW_ATLAS, cost = cost.list[1], rate)
-  NbOTMSM_ATLAS <- Conv.Test(ATLASonly, pop = "MSM")
-  CostConvMSM_ATLAS <- discount(NbOTMSM_ATLAS, cost = cost.list[2], rate)
-  NbOTGEN_ATLAS <- Conv.Test(ATLASonly, pop = "GEN")
-  CostConvGEN_ATLAS <- discount(NbOTGEN_ATLAS, cost = cost.list[3], rate)
-  CostConv_ATLAS <- CostConvFSW_ATLAS + CostConvMSM_ATLAS + CostConvGEN_ATLAS
-  
-  CostConv_Base <- as.data.frame(CostConv_Base)
-  CostConv_ATLAS <- as.data.frame(CostConv_ATLAS)
-  #  CostConv_SU <- as.data.frame(CostConv_SU)
-  # names(CostByYear) <- c("Base Scenario", "ATLAS Only", "Scale Up Scenario")
-  
-  ## Self Test
-  NbSTFSW_ATLAS <- Self.Test(df = ATLASonly, pop = "FSW")
-  STFSW_ATLAS <- discount(NbSTFSW_ATLAS, cost = cost.list[4], rate)
-  NbSTMSM_ATLAS <- Self.Test(df = ATLASonly, pop = "MSM")
-  STMSM_ATLAS <- discount(NbSTMSM_ATLAS, cost = cost.list[5], rate)
-  ST_ATLAS <- STFSW_ATLAS + STMSM_ATLAS
-  
-  ST_ATLAS <- as.data.frame(ST_ATLAS)
-  
-  
-  ## Treatment
-  NbTreated_Base <- ART(NoHIVST)
-  NbTreated_ATLAS <- ART(ATLASonly)
-  Treated_Base <- discount(df = NbTreated_Base, cost = cost.list[6], rate)
-  Treated_ATLAS <- discount(df = NbTreated_ATLAS, cost = cost.list[6], rate)
-  
-  
-  Treated_Base <- as.data.frame(Treated_Base)
-  Treated_ATLAS <- as.data.frame(Treated_ATLAS)
-  
-  
-  ## Conf Test
-  NbConf_FSWATLAS <- Conf.Test(ATLASonly, pop = "FSW")
-  Conf_FSWATLAS <- discount(NbConf_FSWATLAS, cost = cost.list[1], rate)
-  NbConf_MSMATLAS <- Conf.Test(ATLASonly, pop = "MSM")
-  Conf_MSMATLAS <- discount(NbConf_MSMATLAS, cost = cost.list[2], rate)
-  Conf_ATLAS <- Conf_FSWATLAS + Conf_MSMATLAS
-  
-  
-  Conf_ATLAS <- as.data.frame(Conf_ATLAS)
-  
-  
-  ## total
-  total.by.year.base <- CostConv_Base + Treated_Base
-  total.by.year.ATLAS <- CostConv_ATLAS + ST_ATLAS + Treated_ATLAS + Conf_ATLAS
-  
-  total.list <- list(total.by.year.base, total.by.year.ATLAS)
-  names(total.list) <- c("Base Scenario", "ATLAS Only")
-  return(total.list)
 }
 
 
