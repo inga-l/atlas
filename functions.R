@@ -318,69 +318,6 @@ total.med <- function(df){
 
 ### COST CALC FUNCTION ###
 
-## Input Cost category, population, and discount rate
-## Need to define the List of Data first
-
-### MONT CARLO ICER ###
-monte.carlo.icer <- function(num, rate = 0.04, outcome, timeframe = 20){ # time frame = 2019-2039
-  set.seed(34242)
-  # 5 costs
-  OTFSW <- rtri(num, min = 13.10, max = 43.40, mode = 17.54)
-  OTMSM <- rtri(num, min = 15.16, max = 28.26, mode = 22.68)
-  OTGEN <- rtri(num, min = 7.67, max = 40.22, mode = 8.31)
-  # STFSW <- rep(17, num) # OBSERVED INTERVENTION COST for 2019, 2020
-  # STMSM <- rep(27, num) #
-  # STFSW.22 <- rtri(num, min = 12.47, max = 17.74, mode = 13.30)
-  # STFSW.23 <- rtri(num, min = 11.07, max = 16.93, mode = 12.69)
-  # STFSW.24 <- rtri(num, min = 9.90, max = 17.85, mode = 12.50)
-  # STMSM.22 <- rtri(num, min = 22.77, max = 32.35, mode = 24.26)
-  # STMSM.23 <- rtri(num, min = 20.93, max = 30.14, mode = 22.60)
-  # STMSM.24 <- rtri(num, min = 19.98, max = 31.85, mode = 22.29)
-  # STFSW.22 <- rtri(num, min = 9.93, max = 13.26, mode = 10.61) # MA
-  # STFSW.23 <- rtri(num, min = 8.79, max = 12.29, mode = 9.83)
-  # STFSW.24 <- rtri(num, min = 7.99, max = 12.79, mode = 9.59)
-  # STMSM.22 <- rtri(num, min = 17.34, max = 22.52, mode = 18.02)
-  # STMSM.23 <- rtri(num, min = 14.62, max = 20.71, mode = 16.57)
-  # STMSM.24 <- rtri(num, min = 13.12, max = 21.49, mode = 16.12)
-  STFSW.22 <- rtri(num, min = 12.47, max = 17.74, mode = 13.30) # SE
-  STFSW.23 <- rtri(num, min = 11.07, max = 16.93, mode = 12.69)
-  STFSW.24 <- rtri(num, min = 9.90, max = 17.85, mode = 12.50)
-  STMSM.22 <- rtri(num, min = 22.77, max = 32.35, mode = 24.26)
-  STMSM.23 <- rtri(num, min = 20.93, max = 30.14, mode = 22.60)
-  STMSM.24 <- rtri(num, min = 19.98, max = 31.85, mode = 22.29)
-  # STFSW <- rtri(num, min = 15, max = 27, mode = 16) #MA
-  # STMSM <- rtri(num, min = 17, max = 59, mode = 28) #MA
-  STFSW <- rtri(num, min = 13, max = 32, mode = 17) #SE
-  STMSM <- rtri(num, min = 25, max = 28, mode = 27) #SE
-  ART <- rtri(num, min = 102.63, max = 232.60, mode = 198.4) # (65*0.9+227*0.1) /0.8 = 81.25 #1L 2L (165.34*0.9+332.1*0.1)*1.09 # max: (188.66*0.9+436*0.1)*1.09
-  # STFSWSU <- rtri(num, min = st.fsw.dis.ci[1], max = st.fsw.dis.ci[2], mode = st.fsw.dis.ci[3])
-  # STMSMSU <- rtri(num, min = st.msm.dis.ci[1], max = st.msm.dis.ci[2], mode = st.msm.dis.ci[3])
-  # STFSWSU <- rtri(num, min = st.fsw.dis.ma[1], max = st.fsw.dis.ma[2], mode = st.fsw.dis.ma[3]) # MA
-  # STMSMSU <- rtri(num, min = st.msm.dis.ma[1], max = st.msm.dis.ma[2], mode = st.msm.dis.ma[3]) # MA
-  STFSWSU <- rtri(num, min = st.fsw.dis.se[1], max = st.fsw.dis.se[2], mode = st.fsw.dis.se[3])# SE
-  STMSMSU <- rtri(num, min = st.msm.dis.se[1], max = st.msm.dis.se[2], mode = st.msm.dis.se[3])  #SE
-  for(i in 1:num){
-    cost.list <- c(OTFSW[i], OTMSM[i],OTGEN[i], STFSW[i], STMSM[i],
-                   STFSW.22[i], STFSW.23[i], STFSW.24[i],
-                   STMSM.22[i], STMSM.23[i], STMSM.24[i],
-                   ART[i], STFSWSU[i], STMSMSU[i])
-    list.by.scenario <- total.cost.calc.updated(cost.list, rate, timeframe = timeframe)
-    compared.cost <- compare.costs(list.by.scenario)
-    temp.atlas <- icer(compared.cost[[1]], outcome[[1]][,1:(timeframe+1)]) %>% as.data.frame()
-    temp.su <- icer(compared.cost[[2]], outcome[[2]][ ,1:(timeframe+1)]) %>% as.data.frame()
-    if(i == 1){
-      icer.atlas <- temp.atlas
-      icer.su <- temp.su
-    }else{
-      icer.atlas <- rbind(icer.atlas, temp.atlas)
-      icer.su <- rbind(icer.su, temp.su)
-    }
-  }
-  icer.list <- list(icer.atlas, icer.su)
-  names(icer.list) <- c("atlas icer", "su icer")
-  return(icer.list)
-}
-
 icer <- function(cost, outcome, time_horizon = 20){
   cost.by.year <- cost[,1:time_horizon]
   total.cost <- rowSums(cost.by.year)
@@ -676,6 +613,10 @@ monte.carlo.icer.3 <- function(num, rate = 0.04, outcome, timeframe = 20){ # tim
   names(icer.list) <- c("atlas icer")
   return(icer.list)
 }
+## Input Cost category, population, and discount rate
+## Need to define the List of Data first
+
+### MONT CARLO ICER ###
 
 monte.carlo.icer.ci <- function(num, rate = 0.04, outcome, timeframe = 20){ # time frame = 2019-2039
   set.seed(34242)
