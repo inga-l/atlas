@@ -5,14 +5,14 @@ monte.carlo.icer.ci.art <- function(num, rate = 0.04, outcome, timeframe = 20){ 
   OTFSW <- rtri(num, min = 13.10, max = 43.40, mode = 17.54)
   OTMSM <- rtri(num, min = 15.16, max = 28.26, mode = 22.68)
   OTGEN <- rtri(num, min = 7.67, max = 40.22, mode = 8.31)
-  STFSW <- rep(17, num) # OBSERVED INTERVENTION COST for 2019, 2020
-  STMSM <- rep(27, num) #
-  STFSW.22 <- rtri(num, min = 12.47, max = 17.74, mode = 13.30)
-  STFSW.23 <- rtri(num, min = 11.07, max = 16.93, mode = 12.69)
-  STFSW.24 <- rtri(num, min = 9.90, max = 17.85, mode = 12.50)
-  STMSM.22 <- rtri(num, min = 22.77, max = 32.35, mode = 24.26)
-  STMSM.23 <- rtri(num, min = 20.93, max = 30.14, mode = 22.60)
-  STMSM.24 <- rtri(num, min = 19.98, max = 31.85, mode = 22.29)
+  STFSW <- rtri(num, min = 11.9, max = 16.7, mode = 13) # OBSERVED INTERVENTION COST for 2019, 2020
+  STMSM <- rtri(num, min = 13.9, max = 19.2, mode = 15)
+  STFSW.22 <- rtri(num, min = 9.53, max = 10.80, mode = 10.17)
+  STFSW.23 <- rtri(num, min = 8.22, max = 9.40, mode = 8.81)
+  STFSW.24 <- rtri(num, min = 7.8, max = 8.98, mode = 8.39)
+  STMSM.22 <- rtri(num, min = 9.22, max = 10.97, mode = 10.09)
+  STMSM.23 <- rtri(num, min = 8.00, max = 9.69, mode = 8.85)
+  STMSM.24 <- rtri(num, min = 7.64, max = 9.34, mode = 8.49)
   ART <- rtri(num, min = 102.63, max = 609.22, mode = 232.60) # (65*0.9+227*0.1) /0.8 = 81.25 #1L 2L (165.34*0.9+332.1*0.1)*1.09 # max: (188.66*0.9+436*0.1)*1.09
   STFSWSU <- rtri(num, min = st.fsw.dis.ci[1], max = st.fsw.dis.ci[2], mode = st.fsw.dis.ci[3])
   STMSMSU <- rtri(num, min = st.msm.dis.ci[1], max = st.msm.dis.ci[2], mode = st.msm.dis.ci[3])
@@ -44,15 +44,15 @@ monte.carlo.icer.ma.art <- function(num, rate = 0.04, outcome, timeframe = 20){ 
   OTFSW <- rtri(num, min = 13.10, max = 43.40, mode = 17.54)
   OTMSM <- rtri(num, min = 15.16, max = 28.26, mode = 22.68)
   OTGEN <- rtri(num, min = 7.67, max = 40.22, mode = 8.31)
-  STFSW.22 <- rtri(num, min = 9.93, max = 13.26, mode = 10.61) # MA
-  STFSW.23 <- rtri(num, min = 8.79, max = 12.29, mode = 9.83)
-  STFSW.24 <- rtri(num, min = 7.99, max = 12.79, mode = 9.59)
-  STMSM.22 <- rtri(num, min = 17.34, max = 22.52, mode = 18.02)
-  STMSM.23 <- rtri(num, min = 14.62, max = 20.71, mode = 16.57)
-  STMSM.24 <- rtri(num, min = 13.12, max = 21.49, mode = 16.12)
+  STFSW.22 <- rtri(num, min = 9.73, max = 11.50, mode = 10.61) # MA
+  STFSW.23 <- rtri(num, min = 9.00, max = 10.66, mode = 9.83)
+  STFSW.24 <- rtri(num, min = 8.77, max = 10.41, mode = 9.59)
+  STMSM.22 <- rtri(num, min = 16.83, max = 19.20, mode = 18.02)
+  STMSM.23 <- rtri(num, min = 15.43, max = 17.71, mode = 16.57)
+  STMSM.24 <- rtri(num, min = 14.99, max = 17.25, mode = 16.12)
   
-  STFSW <- rtri(num, min = 15, max = 27, mode = 16) #MA
-  STMSM <- rtri(num, min = 17, max = 59, mode = 28) #MA
+  STFSW <- rtri(num, min = 14.4, max = 16.8, mode = 16) #MA
+  STMSM <- rtri(num, min = 25.5, max = 29.3, mode = 28) #MA
   
   ART <- rtri(num, min = 102.63, max = 609.22, mode = 232.60) # (65*0.9+227*0.1) /0.8 = 81.25 #1L 2L (165.34*0.9+332.1*0.1)*1.09 # max: (188.66*0.9+436*0.1)*1.09
   
@@ -86,14 +86,14 @@ monte.carlo.icer.se.art <- function(num, rate = 0.04, outcome, timeframe = 20){ 
   OTFSW <- rtri(num, min = 13.10, max = 43.40, mode = 17.54)
   OTMSM <- rtri(num, min = 15.16, max = 28.26, mode = 22.68)
   OTGEN <- rtri(num, min = 7.67, max = 40.22, mode = 8.31)
-  STFSW.22 <- rtri(num, min = 12.47, max = 17.74, mode = 13.30) # SE
-  STFSW.23 <- rtri(num, min = 11.07, max = 16.93, mode = 12.69)
-  STFSW.24 <- rtri(num, min = 9.90, max = 17.85, mode = 12.50)
-  STMSM.22 <- rtri(num, min = 22.77, max = 32.35, mode = 24.26)
-  STMSM.23 <- rtri(num, min = 20.93, max = 30.14, mode = 22.60)
-  STMSM.24 <- rtri(num, min = 19.98, max = 31.85, mode = 22.29)
-  STFSW <- rtri(num, min = 13, max = 32, mode = 17) #SE
-  STMSM <- rtri(num, min = 25, max = 28, mode = 27) #SE
+  STFSW.22 <- rtri(num, min = 12.42, max = 14.19, mode = 13.30) # SE
+  STFSW.23 <- rtri(num, min = 11.87, max = 13.52, mode = 12.69)
+  STFSW.24 <- rtri(num, min = 11.67, max = 13.32, mode = 12.50)
+  STMSM.22 <- rtri(num, min = 22.53, max = 25.99, mode = 24.26)
+  STMSM.23 <- rtri(num, min = 21.21, max = 24.00, mode = 22.60)
+  STMSM.24 <- rtri(num, min = 20.83, max = 23.75, mode = 22.29)
+  STFSW <- rtri(num, min = 16.7, max = 19, mode = 17.1) #SE
+  STMSM <- rtri(num, min = 26.1, max = 30.2, mode = 27) #SE
   ART <- rtri(num, min = 102.63, max = 609.22, mode = 232.60) # (65*0.9+227*0.1) /0.8 = 81.25 #1L 2L (165.34*0.9+332.1*0.1)*1.09 # max: (188.66*0.9+436*0.1)*1.09
   STFSWSU <- rtri(num, min = st.fsw.dis.se[1], max = st.fsw.dis.se[2], mode = st.fsw.dis.se[3])# SE
   STMSMSU <- rtri(num, min = st.msm.dis.se[1], max = st.msm.dis.se[2], mode = st.msm.dis.se[3])  #SE

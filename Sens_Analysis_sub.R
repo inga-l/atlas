@@ -88,7 +88,7 @@ death.ma.sub <- monte.carlo.icer.ma(num = 100, rate = 0.04, outcome = death.diff
 Unc.int(daly.ma.sub[[1]][,1])
 Unc.int(daly.ma.sub[[2]][,1])
 
-daly.se.sub <- monte.carlo.icer.se(num = 100, rate = 0.04, outcome = DALY.diff)
+  daly.se.sub <- monte.carlo.icer.se(num = 100, rate = 0.04, outcome = DALY.diff)
 inf.se.sub <- monte.carlo.icer.se(num = 100, rate = 0.04, outcome = inf.diff)
 death.se.sub <- monte.carlo.icer.se(num = 100, rate = 0.04, outcome = death.diff)
 

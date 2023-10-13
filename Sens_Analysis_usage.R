@@ -24,11 +24,11 @@ country <- "SE"
 DALY.base <- DALY.Calc(NoHIVST, country = country)
 DALY.base.dis <- DALY.Calc(NoHIVST, country = country)
 
-DALY.ATLAS <- DALY.Calc(ATLASonly.usage.SE, country = country)
-DALY.ATLAS.dis <- DALY.Calc(ATLASonly.usage.SE, country = country)
+DALY.ATLAS <- DALY.Calc(ATLASonly.usage.MA, country = country)
+DALY.ATLAS.dis <- DALY.Calc(ATLASonly.usage.MA, country = country)
 
-DALY.SU <- DALY.Calc(ATLASSU.usage.SE, country = country)
-DALY.SU.dis <- DALY.Calc(ATLASSU.usage.SE, country = country)
+DALY.SU <- DALY.Calc(ATLASSU.usage.MA, country = country)
+DALY.SU.dis <- DALY.Calc(ATLASSU.usage.MA, country = country)
 
 DALY.diff <- compare(DALY.base, DALY.ATLAS, DALY.SU, averted = TRUE)
 DALY.total.diff <- list(rowSums(DALY.diff[[1]][1:21]), rowSums(DALY.diff[[2]][1:21])) 
@@ -42,11 +42,11 @@ death <- AIDS.deaths(NoHIVST, timeframe = 20)
 death.base <- death[[1]][[1]]
 death.base.dis <- death[[1]][[2]]
 
-death <- AIDS.deaths(ATLASonly.usage.SE, timeframe = 20)
+death <- AIDS.deaths(ATLASonly.usage.MA, timeframe = 20)
 death.ATLAS <- death[[1]][[1]]
 death.ATLAS.dis <- death[[1]][[2]]
 
-death <- AIDS.deaths(ATLASSU.usage.SE, timeframe = 20)
+death <- AIDS.deaths(ATLASSU.usage.MA, timeframe = 20)
 death.SU <- death[[1]][[1]]
 death.SU.dis <- death[[1]][[2]]
 
@@ -61,11 +61,11 @@ inf <- AIDS.inf(NoHIVST, timeframe = 20)
 inf.base <- inf[[1]][[1]]
 inf.base.dis <- inf[[1]][[2]]
 
-inf <- AIDS.inf(ATLASonly.usage.SE, timeframe = 20)
+inf <- AIDS.inf(ATLASonly.usage.MA, timeframe = 20)
 inf.ATLAS <- inf[[1]][[1]]
 inf.ATLAS.dis <- inf[[1]][[2]]
 
-inf <- AIDS.inf(ATLASSU.usage.SE, timeframe = 20)
+inf <- AIDS.inf(ATLASSU.usage.MA, timeframe = 20)
 inf.SU <- inf[[1]][[1]]
 inf.SU.dis <- inf[[1]][[2]]
 

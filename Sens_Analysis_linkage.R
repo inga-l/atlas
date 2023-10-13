@@ -28,11 +28,11 @@ country <- "SE"
 DALY.base <- DALY.Calc(NoHIVST, country = country)
 DALY.base.dis <- DALY.Calc(NoHIVST, country = country)
 
-DALY.ATLAS <- DALY.Calc(ATLASonly.linkage.SE, country = country)
-DALY.ATLAS.dis <- DALY.Calc(ATLASonly.linkage.SE, country = country)
+DALY.ATLAS <- DALY.Calc(ATLASonly.linkage.MA, country = country)
+DALY.ATLAS.dis <- DALY.Calc(ATLASonly.linkage.MA, country = country)
 
-DALY.SU <- DALY.Calc(ATLASSU.linkage.SE, country = country)
-DALY.SU.dis <- DALY.Calc(ATLASSU.linkage.SE, country = country)
+DALY.SU <- DALY.Calc(ATLASSU.linkage.MA, country = country)
+DALY.SU.dis <- DALY.Calc(ATLASSU.linkage.MA, country = country)
 
 DALY.diff <- compare(DALY.base, DALY.ATLAS, DALY.SU, averted = TRUE)
 DALY.total.diff <- list(rowSums(DALY.diff[[1]][1:21]), rowSums(DALY.diff[[2]][1:21])) 
@@ -46,11 +46,11 @@ death <- AIDS.deaths(NoHIVST, timeframe = 20)
 death.base <- death[[1]][[1]]
 death.base.dis <- death[[1]][[2]]
 
-death <- AIDS.deaths(ATLASonly.linkage.SE, timeframe = 20)
+death <- AIDS.deaths(ATLASonly.linkage.MA, timeframe = 20)
 death.ATLAS <- death[[1]][[1]]
 death.ATLAS.dis <- death[[1]][[2]]
 
-death <- AIDS.deaths(ATLASSU.linkage.SE, timeframe = 20)
+death <- AIDS.deaths(ATLASSU.linkage.MA, timeframe = 20)
 death.SU <- death[[1]][[1]]
 death.SU.dis <- death[[1]][[2]]
 
@@ -65,11 +65,11 @@ inf <- AIDS.inf(NoHIVST, timeframe = 20)
 inf.base <- inf[[1]][[1]]
 inf.base.dis <- inf[[1]][[2]]
 
-inf <- AIDS.inf(ATLASonly.linkage.SE, timeframe = 20)
+inf <- AIDS.inf(ATLASonly.linkage.MA, timeframe = 20)
 inf.ATLAS <- inf[[1]][[1]]
 inf.ATLAS.dis <- inf[[1]][[2]]
 
-inf <- AIDS.inf(ATLASSU.linkage.SE, timeframe = 20)
+inf <- AIDS.inf(ATLASSU.linkage.MA, timeframe = 20)
 inf.SU <- inf[[1]][[1]]
 inf.SU.dis <- inf[[1]][[2]]
 
@@ -79,6 +79,9 @@ names(inf.diff) <- c("ATLAS vs Base", "Scale up vs Base")
 daly.ci.linkage <- monte.carlo.icer.ci(num = 100, rate = 0.04, outcome = DALY.diff)
 inf.ci.linkage <- monte.carlo.icer.ci(num = 100, rate = 0.04, outcome = inf.diff)
 death.ci.linkage <- monte.carlo.icer.ci(num = 100, rate = 0.04, outcome = death.diff)
+
+
+
 
 daly.ma.linkage <- monte.carlo.icer.ma(num = 100, rate = 0.04, outcome = DALY.diff)
 inf.ma.linkage <- monte.carlo.icer.ma(num = 100, rate = 0.04, outcome = inf.diff)

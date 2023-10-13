@@ -100,6 +100,6 @@ Unc.int(daly.ma.no.disc[[2]][,1])
 daly.se.no.disc <- monte.carlo.icer.se(num = 100, rate = 0.00, outcome = DALY.diff)
 inf.se.no.disc <- monte.carlo.icer.se(num = 100, rate = 0.00, outcome = inf.diff)
 death.se.no.disc <- monte.carlo.icer.se(num = 100, rate = 0.00, outcome = death.diff)
-
+  
 Unc.int(daly.se.no.disc[[1]][,1])
 Unc.int(daly.se.no.disc[[2]][,1])
